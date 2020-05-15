@@ -16,9 +16,9 @@ import (
 type Flag struct {
 	Id int64 `json:"id,omitempty"`
 	// unique key representation of the flag
-	Key string `json:"key,omitempty"`
+	Key string         `json:"key,omitempty"`
 	Description string `json:"description"`
-	Enabled bool `json:"enabled"`
+	Enabled bool       `json:"enabled"`
 	Segments []Segment `json:"segments,omitempty"`
 	Variants []Variant `json:"variants,omitempty"`
 	// enabled data records will get data logging in the metrics pipeline, for example, kafka.

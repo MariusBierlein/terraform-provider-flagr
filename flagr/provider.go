@@ -1,8 +1,8 @@
-package main
+package flagr
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/api"
+	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 	"net/url"
 )
 

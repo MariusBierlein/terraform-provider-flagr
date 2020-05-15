@@ -11,5 +11,5 @@ package api
 
 type EvalDebugLog struct {
 	SegmentDebugLogs []SegmentDebugLog `json:"segmentDebugLogs,omitempty"`
-	Msg string `json:"msg,omitempty"`
+	Msg string                         `json:"msg,omitempty"`
 }

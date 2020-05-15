@@ -1,10 +1,10 @@
-package main
+package flagr
 
 import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/mariusbierlein/terraform-provider-flagr/api"
+	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 	"strconv"
 )
 

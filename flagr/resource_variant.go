@@ -1,9 +1,9 @@
-package main
+package flagr
 
 import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/api"
+	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 )
 
 func ResourceVariant() *schema.Resource {

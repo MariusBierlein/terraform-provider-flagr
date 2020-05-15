@@ -10,8 +10,8 @@
 package api
 
 type FlagSnapshot struct {
-	Id int64 `json:"id"`
+	Id int64         `json:"id"`
 	UpdatedBy string `json:"updatedBy,omitempty"`
-	Flag *Flag `json:"flag"`
+	Flag *Flag       `json:"flag"`
 	UpdatedAt string `json:"updatedAt"`
 }

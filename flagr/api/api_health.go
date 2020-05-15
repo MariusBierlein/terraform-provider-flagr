@@ -34,10 +34,10 @@ Check if Flagr is healthy
 */
 func (a *HealthApiService) GetHealth(ctx context.Context) (Health, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Get")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Get")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Health
 	)
 

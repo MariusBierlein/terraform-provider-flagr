@@ -12,11 +12,11 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-	"fmt"
 )
 
 // Linger please
@@ -36,10 +36,10 @@ SegmentApiService
 */
 func (a *SegmentApiService) CreateSegment(ctx context.Context, flagID int64, body CreateSegmentRequest) (Segment, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Post")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Post")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Segment
 	)
 
@@ -333,10 +333,10 @@ SegmentApiService
 */
 func (a *SegmentApiService) PutSegment(ctx context.Context, flagID int64, segmentID int64, body PutSegmentRequest) (Segment, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Put")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Put")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Segment
 	)
 

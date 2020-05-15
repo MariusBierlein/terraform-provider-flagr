@@ -12,11 +12,11 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-	"fmt"
 )
 
 // Linger please
@@ -24,34 +24,39 @@ var (
 	_ context.Context
 )
 
-type VariantApiService service
+type ConstraintApiService service
 
 /* 
-VariantApiService
+ConstraintApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param flagID numeric ID of the flag
- * @param body create a variant
+ * @param segmentID numeric ID of the segment
+ * @param body create a constraint
 
-@return Variant
+@return Constraint
 */
-func (a *VariantApiService) CreateVariant(ctx context.Context, flagID int64, body CreateVariantRequest) (Variant, *http.Response, error) {
+func (a *ConstraintApiService) CreateConstraint(ctx context.Context, flagID int64, segmentID int64, body CreateConstraintRequest) (Constraint, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Post")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
-		localVarReturnValue Variant
+		localVarHttpMethod  = strings.ToUpper("Post")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
+		localVarReturnValue Constraint
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/variants"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/constraints"
 	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 	if flagID < 1 {
 		return localVarReturnValue, nil, reportError("flagID must be greater than 1")
+	}
+	if segmentID < 1 {
+		return localVarReturnValue, nil, reportError("segmentID must be greater than 1")
 	}
 
 	// to determine the Content-Type header
@@ -104,7 +109,7 @@ func (a *VariantApiService) CreateVariant(ctx context.Context, flagID int64, bod
 		}
 		
 		if localVarHttpResponse.StatusCode == 200 {
-			var v Variant
+			var v Constraint
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
 				if err != nil {
 					newErr.error = err.Error()
@@ -132,14 +137,15 @@ func (a *VariantApiService) CreateVariant(ctx context.Context, flagID int64, bod
 }
 
 /* 
-VariantApiService
+ConstraintApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param flagID numeric ID of the flag
- * @param variantID numeric ID of the variant
+ * @param segmentID numeric ID of the segment
+ * @param constraintID numeric ID of the constraint
 
 
 */
-func (a *VariantApiService) DeleteVariant(ctx context.Context, flagID int64, variantID int64) (*http.Response, error) {
+func (a *ConstraintApiService) DeleteConstraint(ctx context.Context, flagID int64, segmentID int64, constraintID int64) (*http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Delete")
 		localVarPostBody   interface{}
@@ -149,9 +155,10 @@ func (a *VariantApiService) DeleteVariant(ctx context.Context, flagID int64, var
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/variants/{variantID}"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/constraints/{constraintID}"
 	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"variantID"+"}", fmt.Sprintf("%v", variantID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"constraintID"+"}", fmt.Sprintf("%v", constraintID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -159,8 +166,11 @@ func (a *VariantApiService) DeleteVariant(ctx context.Context, flagID int64, var
 	if flagID < 1 {
 		return nil, reportError("flagID must be greater than 1")
 	}
-	if variantID < 1 {
-		return nil, reportError("variantID must be greater than 1")
+	if segmentID < 1 {
+		return nil, reportError("segmentID must be greater than 1")
+	}
+	if constraintID < 1 {
+		return nil, reportError("constraintID must be greater than 1")
 	}
 
 	// to determine the Content-Type header
@@ -221,30 +231,35 @@ func (a *VariantApiService) DeleteVariant(ctx context.Context, flagID int64, var
 }
 
 /* 
-VariantApiService
+ConstraintApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param flagID numeric ID of the flag
+ * @param segmentID numeric ID of the segment
 
-@return []Variant
+@return []Constraint
 */
-func (a *VariantApiService) FindVariants(ctx context.Context, flagID int64) ([]Variant, *http.Response, error) {
+func (a *ConstraintApiService) FindConstraints(ctx context.Context, flagID int64, segmentID int64) ([]Constraint, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
 		localVarFileName   string
 		localVarFileBytes  []byte
-		localVarReturnValue []Variant
+		localVarReturnValue []Constraint
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/variants"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/constraints"
 	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 	if flagID < 1 {
 		return localVarReturnValue, nil, reportError("flagID must be greater than 1")
+	}
+	if segmentID < 1 {
+		return localVarReturnValue, nil, reportError("segmentID must be greater than 1")
 	}
 
 	// to determine the Content-Type header
@@ -295,7 +310,7 @@ func (a *VariantApiService) FindVariants(ctx context.Context, flagID int64) ([]V
 		}
 		
 		if localVarHttpResponse.StatusCode == 200 {
-			var v []Variant
+			var v []Constraint
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
 				if err != nil {
 					newErr.error = err.Error()
@@ -323,27 +338,29 @@ func (a *VariantApiService) FindVariants(ctx context.Context, flagID int64) ([]V
 }
 
 /* 
-VariantApiService
+ConstraintApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param flagID numeric ID of the flag
- * @param variantID numeric ID of the variant
- * @param body update a variant
+ * @param segmentID numeric ID of the segment
+ * @param constraintID numeric ID of the constraint
+ * @param body create a constraint
 
-@return Variant
+@return Constraint
 */
-func (a *VariantApiService) PutVariant(ctx context.Context, flagID int64, variantID int64, body PutVariantRequest) (Variant, *http.Response, error) {
+func (a *ConstraintApiService) PutConstraint(ctx context.Context, flagID int64, segmentID int64, constraintID int64, body CreateConstraintRequest) (Constraint, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Put")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
-		localVarReturnValue Variant
+		localVarHttpMethod  = strings.ToUpper("Put")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
+		localVarReturnValue Constraint
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/variants/{variantID}"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/constraints/{constraintID}"
 	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"variantID"+"}", fmt.Sprintf("%v", variantID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"constraintID"+"}", fmt.Sprintf("%v", constraintID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -351,8 +368,11 @@ func (a *VariantApiService) PutVariant(ctx context.Context, flagID int64, varian
 	if flagID < 1 {
 		return localVarReturnValue, nil, reportError("flagID must be greater than 1")
 	}
-	if variantID < 1 {
-		return localVarReturnValue, nil, reportError("variantID must be greater than 1")
+	if segmentID < 1 {
+		return localVarReturnValue, nil, reportError("segmentID must be greater than 1")
+	}
+	if constraintID < 1 {
+		return localVarReturnValue, nil, reportError("constraintID must be greater than 1")
 	}
 
 	// to determine the Content-Type header
@@ -405,7 +425,7 @@ func (a *VariantApiService) PutVariant(ctx context.Context, flagID int64, varian
 		}
 		
 		if localVarHttpResponse.StatusCode == 200 {
-			var v Variant
+			var v Constraint
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
 				if err != nil {
 					newErr.error = err.Error()

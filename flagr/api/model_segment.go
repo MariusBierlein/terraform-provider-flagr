@@ -10,10 +10,10 @@
 package api
 
 type Segment struct {
-	Id int64 `json:"id,omitempty"`
-	Description string `json:"description"`
-	Constraints []Constraint `json:"constraints,omitempty"`
+	Id int64                     `json:"id,omitempty"`
+	Description string           `json:"description"`
+	Constraints []Constraint     `json:"constraints,omitempty"`
 	Distributions []Distribution `json:"distributions,omitempty"`
-	Rank int64 `json:"rank"`
-	RolloutPercent int64 `json:"rolloutPercent"`
+	Rank int64                   `json:"rank"`
+	RolloutPercent int64         `json:"rolloutPercent"`
 }

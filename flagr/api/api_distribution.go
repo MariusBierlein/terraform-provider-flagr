@@ -12,6 +12,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -23,30 +24,39 @@ var (
 	_ context.Context
 )
 
-type EvaluationApiService service
+type DistributionApiService service
 
 /* 
-EvaluationApiService
+DistributionApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param body evalution context
+ * @param flagID numeric ID of the flag
+ * @param segmentID numeric ID of the segment
 
-@return EvalResult
+@return []Distribution
 */
-func (a *EvaluationApiService) PostEvaluation(ctx context.Context, body EvalContext) (EvalResult, *http.Response, error) {
+func (a *DistributionApiService) FindDistributions(ctx context.Context, flagID int64, segmentID int64) ([]Distribution, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Post")
+		localVarHttpMethod = strings.ToUpper("Get")
 		localVarPostBody   interface{}
 		localVarFileName   string
 		localVarFileBytes  []byte
-		localVarReturnValue EvalResult
+		localVarReturnValue []Distribution
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/evaluation"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/distributions"
+	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if flagID < 1 {
+		return localVarReturnValue, nil, reportError("flagID must be greater than 1")
+	}
+	if segmentID < 1 {
+		return localVarReturnValue, nil, reportError("segmentID must be greater than 1")
+	}
 
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
@@ -65,8 +75,6 @@ func (a *EvaluationApiService) PostEvaluation(ctx context.Context, body EvalCont
 	if localVarHttpHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
-	// body params
-	localVarPostBody = &body
 	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -98,7 +106,7 @@ func (a *EvaluationApiService) PostEvaluation(ctx context.Context, body EvalCont
 		}
 		
 		if localVarHttpResponse.StatusCode == 200 {
-			var v EvalResult
+			var v []Distribution
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
 				if err != nil {
 					newErr.error = err.Error()
@@ -126,27 +134,38 @@ func (a *EvaluationApiService) PostEvaluation(ctx context.Context, body EvalCont
 }
 
 /* 
-EvaluationApiService
+DistributionApiService
+replace the distribution with the new setting
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param body evalution batch request
+ * @param flagID numeric ID of the flag
+ * @param segmentID numeric ID of the segment
+ * @param body array of distributions
 
-@return EvaluationBatchResponse
+@return []Distribution
 */
-func (a *EvaluationApiService) PostEvaluationBatch(ctx context.Context, body EvaluationBatchRequest) (EvaluationBatchResponse, *http.Response, error) {
+func (a *DistributionApiService) PutDistributions(ctx context.Context, flagID int64, segmentID int64, body PutDistributionsRequest) ([]Distribution, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Post")
+		localVarHttpMethod = strings.ToUpper("Put")
 		localVarPostBody   interface{}
 		localVarFileName   string
 		localVarFileBytes  []byte
-		localVarReturnValue EvaluationBatchResponse
+		localVarReturnValue []Distribution
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/evaluation/batch"
+	localVarPath := a.client.cfg.BasePath + "/flags/{flagID}/segments/{segmentID}/distributions"
+	localVarPath = strings.Replace(localVarPath, "{"+"flagID"+"}", fmt.Sprintf("%v", flagID), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"segmentID"+"}", fmt.Sprintf("%v", segmentID), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if flagID < 1 {
+		return localVarReturnValue, nil, reportError("flagID must be greater than 1")
+	}
+	if segmentID < 1 {
+		return localVarReturnValue, nil, reportError("segmentID must be greater than 1")
+	}
 
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{"application/json"}
@@ -198,7 +217,7 @@ func (a *EvaluationApiService) PostEvaluationBatch(ctx context.Context, body Eva
 		}
 		
 		if localVarHttpResponse.StatusCode == 200 {
-			var v EvaluationBatchResponse
+			var v []Distribution
 			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
 				if err != nil {
 					newErr.error = err.Error()

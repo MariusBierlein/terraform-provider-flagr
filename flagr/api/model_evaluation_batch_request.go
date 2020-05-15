@@ -11,7 +11,7 @@ package api
 
 type EvaluationBatchRequest struct {
 	Entities []EvaluationEntity `json:"entities"`
-	EnableDebug bool `json:"enableDebug,omitempty"`
+	EnableDebug bool            `json:"enableDebug,omitempty"`
 	// flagIDs
 	FlagIDs []int64 `json:"flagIDs,omitempty"`
 	// flagKeys. Either flagIDs or flagKeys works. If pass in both, Flagr may return duplicate results.

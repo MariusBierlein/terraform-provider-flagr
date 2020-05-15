@@ -1,4 +1,4 @@
-package main
+package flagr
 
 import (
 	"encoding/json"

@@ -12,12 +12,12 @@ package api
 
 import (
 	"context"
+	"fmt"
+	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -36,10 +36,10 @@ FlagApiService
 */
 func (a *FlagApiService) CreateFlag(ctx context.Context, body CreateFlagRequest) (Flag, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Post")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Post")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Flag
 	)
 
@@ -357,10 +357,10 @@ FlagApiService
 */
 func (a *FlagApiService) GetFlag(ctx context.Context, flagID int64) (Flag, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Get")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Get")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Flag
 	)
 
@@ -659,10 +659,10 @@ FlagApiService
 */
 func (a *FlagApiService) PutFlag(ctx context.Context, flagID int64, body PutFlagRequest) (Flag, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Put")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Put")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Flag
 	)
 
@@ -764,10 +764,10 @@ FlagApiService
 */
 func (a *FlagApiService) SetFlagEnabled(ctx context.Context, flagID int64, body SetFlagEnabledRequest) (Flag, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Put")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Put")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue Flag
 	)
 
