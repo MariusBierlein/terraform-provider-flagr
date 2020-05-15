@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/mariusbierlein/terraform-provider-flagr/api"
 	"strconv"
@@ -53,4 +54,15 @@ func stringToInt64(str string) int64 {
 
 func int64ToString(i int64) string {
 	return strconv.FormatInt(i, 10)
+}
+
+func expandAttachment(str string) *interface{} {
+	var attachment interface{}
+	json.Unmarshal([]byte(str), &attachment)
+	return &attachment
+}
+
+func flattenAttachment(j interface{}) string {
+	str, _ := json.Marshal(j)
+	return string(str)
 }

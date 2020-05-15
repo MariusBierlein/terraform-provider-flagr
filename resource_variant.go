@@ -24,11 +24,14 @@ func ResourceVariant() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			// todo: implement
-			//"attachment": {
-			//	Type:     schema.TypeString,
-			//	Optional: true,
-			//},
+			"attachment": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "{}",
+				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+					return jsonEqual(old, new)
+				},
+			},
 		},
 	}
 }
@@ -37,7 +40,8 @@ func resourceVariantCreate(data *schema.ResourceData, i interface{}) error {
 	a := i.(*api.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	variant, _, _ := a.VariantApi.CreateVariant(context.TODO(), flagId, api.CreateVariantRequest{
-		Key: data.Get("key").(string),
+		Key:        data.Get("key").(string),
+		Attachment: expandAttachment(data.Get("attachment").(string)),
 	})
 	data.SetId(int64ToString(variant.Id))
 	return resourceVariantRead(data, i)
@@ -55,17 +59,19 @@ func resourceVariantRead(data *schema.ResourceData, i interface{}) error {
 		}
 	}
 	data.Set("key", variant.Key)
+	data.Set("attachment", flattenAttachment(variant.Attachment))
 	return nil
 }
 
 func resourceVariantUpdate(data *schema.ResourceData, i interface{}) error {
 	a := i.(*api.APIClient)
-	if data.HasChange("key") {
+	if data.HasChanges("key", "attachment") {
 		flagId := stringToInt64(data.Get("flag_id").(string))
 		variantId := stringToInt64(data.Id())
 		//todo: error handling
 		a.VariantApi.PutVariant(context.TODO(), flagId, variantId, api.PutVariantRequest{
-			Key: data.Get("key").(string),
+			Key:        data.Get("key").(string),
+			Attachment: expandAttachment(data.Get("attachment").(string)),
 		})
 	}
 	return resourceVariantRead(data, i)
