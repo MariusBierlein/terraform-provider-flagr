@@ -4,3 +4,18 @@ services:
     image: checkr/flagr
     ports:
       - "18000:18000"
+    environment:
+      FLAGR_DB_DBDRIVER: "postgres"
+      FLAGR_DB_DBCONNECTIONSTR: "sslmode=disable host=postgres user=postgres password=password dbname=flagr"
+  postgres:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flagr
+    volumes:
+      - postgresData:/var/lib/postgresql/data
+volumes:
+  postgresData:
