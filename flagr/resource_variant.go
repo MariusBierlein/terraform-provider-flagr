@@ -2,8 +2,8 @@ package flagr
 
 import (
 	"context"
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 )
 
 func ResourceVariant() *schema.Resource {
@@ -37,9 +37,9 @@ func ResourceVariant() *schema.Resource {
 }
 
 func resourceVariantCreate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
-	variant, _, _ := a.VariantApi.CreateVariant(context.TODO(), flagId, api.CreateVariantRequest{
+	variant, _, _ := a.VariantApi.CreateVariant(context.TODO(), flagId, goflagr.CreateVariantRequest{
 		Key:        data.Get("key").(string),
 		Attachment: expandAttachment(data.Get("attachment").(string)),
 	})
@@ -48,10 +48,10 @@ func resourceVariantCreate(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceVariantRead(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	variants, _, _ := a.VariantApi.FindVariants(context.TODO(), flagId)
-	var variant api.Variant
+	var variant goflagr.Variant
 	for _, v := range variants {
 		if v.Id == stringToInt64(data.Id()) {
 			variant = v
@@ -64,12 +64,12 @@ func resourceVariantRead(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceVariantUpdate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	if data.HasChanges("key", "attachment") {
 		flagId := stringToInt64(data.Get("flag_id").(string))
 		variantId := stringToInt64(data.Id())
 		//todo: error handling
-		a.VariantApi.PutVariant(context.TODO(), flagId, variantId, api.PutVariantRequest{
+		a.VariantApi.PutVariant(context.TODO(), flagId, variantId, goflagr.PutVariantRequest{
 			Key:        data.Get("key").(string),
 			Attachment: expandAttachment(data.Get("attachment").(string)),
 		})
@@ -78,7 +78,7 @@ func resourceVariantUpdate(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceVariantDelete(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	variantId := stringToInt64(data.Id())
 

@@ -2,8 +2,8 @@ package flagr
 
 import (
 	"context"
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 )
 
 func ResourceSegment() *schema.Resource {
@@ -75,9 +75,9 @@ func resourceSegmentCustomDiff(diff *schema.ResourceDiff, i interface{}) error {
 }
 
 func resourceSegmentCreate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
-	segment, _, err := a.SegmentApi.CreateSegment(context.TODO(), flagId, api.CreateSegmentRequest{
+	segment, _, err := a.SegmentApi.CreateSegment(context.TODO(), flagId, goflagr.CreateSegmentRequest{
 		Description:    data.Get("description").(string),
 		RolloutPercent: expandInt64(data.Get("rollout_percent")),
 	})
@@ -89,10 +89,10 @@ func resourceSegmentCreate(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceSegmentRead(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segments, _, err := a.SegmentApi.FindSegments(context.TODO(), flagId)
-	var segment api.Segment
+	var segment goflagr.Segment
 	for _, v := range segments {
 		if v.Id == stringToInt64(data.Id()) {
 			segment = v
@@ -110,24 +110,24 @@ func resourceSegmentRead(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceSegmentUpdate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segmentId := stringToInt64(data.Id())
 	if data.HasChanges("description", "rollout_percent") {
 		//todo: error handling
-		a.SegmentApi.PutSegment(context.TODO(), flagId, segmentId, api.PutSegmentRequest{
+		a.SegmentApi.PutSegment(context.TODO(), flagId, segmentId, goflagr.PutSegmentRequest{
 			Description:    data.Get("description").(string),
 			RolloutPercent: expandInt64(data.Get("rollout_percent")),
 		})
 	}
 	if data.HasChange("distributions") {
-		a.DistributionApi.PutDistributions(context.TODO(), flagId, segmentId, api.PutDistributionsRequest{Distributions: expandDistributions(data.Get("distributions"))})
+		a.DistributionApi.PutDistributions(context.TODO(), flagId, segmentId, goflagr.PutDistributionsRequest{Distributions: expandDistributions(data.Get("distributions"))})
 	}
 	return resourceVariantRead(data, i)
 }
 
 func resourceSegmentDelete(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segmentId := stringToInt64(data.Id())
 	a.SegmentApi.DeleteSegment(context.TODO(), flagId, segmentId)

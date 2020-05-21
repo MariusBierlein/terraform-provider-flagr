@@ -2,12 +2,12 @@ package flagr
 
 import (
 	"encoding/json"
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 	"strconv"
 )
 
-func flattenDistributions(distributions []api.Distribution) *schema.Set {
+func flattenDistributions(distributions []goflagr.Distribution) *schema.Set {
 	m := make([]interface{}, 0, 0)
 	for _, d := range distributions {
 		m = append(m, map[string]interface{}{
@@ -20,15 +20,15 @@ func flattenDistributions(distributions []api.Distribution) *schema.Set {
 	return schema.NewSet(distributionSetFunc, m)
 }
 
-func expandDistributions(list interface{}) []api.Distribution {
-	distributions := make([]api.Distribution, 0, 0)
+func expandDistributions(list interface{}) []goflagr.Distribution {
+	distributions := make([]goflagr.Distribution, 0, 0)
 	for _, l := range list.(*schema.Set).List() {
 		dis, ok := l.(map[string]interface{})
 		if !ok {
 			continue
 		}
 		distributions = append(distributions,
-			api.Distribution{
+			goflagr.Distribution{
 				Id:         stringToInt64(dis["id"].(string)),
 				Percent:    expandInt64(dis["percent"]),
 				VariantKey: dis["variant_key"].(string),

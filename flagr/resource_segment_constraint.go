@@ -2,8 +2,8 @@ package flagr
 
 import (
 	"context"
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 )
 
 func ResourceSegmentConstraint() *schema.Resource {
@@ -41,10 +41,10 @@ func ResourceSegmentConstraint() *schema.Resource {
 }
 
 func resourceSegmentConstraintCreate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segmentId := stringToInt64(data.Get("segment_id").(string))
-	constraint, _, _ := a.ConstraintApi.CreateConstraint(context.TODO(), flagId, segmentId, api.CreateConstraintRequest{
+	constraint, _, _ := a.ConstraintApi.CreateConstraint(context.TODO(), flagId, segmentId, goflagr.CreateConstraintRequest{
 		Property: data.Get("property").(string),
 		Operator: data.Get("operator").(string),
 		Value:    data.Get("value").(string),
@@ -54,11 +54,11 @@ func resourceSegmentConstraintCreate(data *schema.ResourceData, i interface{}) e
 }
 
 func resourceSegmentConstraintRead(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segmentId := stringToInt64(data.Get("segment_id").(string))
 	constraints, _, _ := a.ConstraintApi.FindConstraints(context.TODO(), flagId, segmentId)
-	var constraint api.Constraint
+	var constraint goflagr.Constraint
 	for _, c := range constraints {
 		if c.Id == stringToInt64(data.Id()) {
 			constraint = c
@@ -72,13 +72,13 @@ func resourceSegmentConstraintRead(data *schema.ResourceData, i interface{}) err
 }
 
 func resourceSegmentConstraintUpdate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	if data.HasChanges("operator", "property", "value") {
 		flagId := stringToInt64(data.Get("flag_id").(string))
 		segmentId := stringToInt64(data.Get("segment_id").(string))
 		constraintId := stringToInt64(data.Id())
 		//todo: error handling
-		a.ConstraintApi.PutConstraint(context.TODO(), flagId, segmentId, constraintId, api.CreateConstraintRequest{
+		a.ConstraintApi.PutConstraint(context.TODO(), flagId, segmentId, constraintId, goflagr.CreateConstraintRequest{
 			Property: data.Get("property").(string),
 			Operator: data.Get("operator").(string),
 			Value:    data.Get("value").(string),
@@ -88,7 +88,7 @@ func resourceSegmentConstraintUpdate(data *schema.ResourceData, i interface{}) e
 }
 
 func resourceSegmentConstraintDelete(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Get("flag_id").(string))
 	segmentId := stringToInt64(data.Get("segment_id").(string))
 	constraintId := stringToInt64(data.Id())

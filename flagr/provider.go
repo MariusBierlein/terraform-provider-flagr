@@ -1,8 +1,8 @@
 package flagr
 
 import (
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 	"net/url"
 )
 
@@ -26,11 +26,11 @@ func Provider() *schema.Provider {
 			"flagr_segment_constraint": ResourceSegmentConstraint(),
 		},
 		ConfigureFunc: func(data *schema.ResourceData) (i interface{}, err error) {
-			cfg := api.NewConfiguration()
+			cfg := goflagr.NewConfiguration()
 			base, _ := url.Parse(data.Get("api_host").(string))
 			path, _ := url.Parse(data.Get("api_path").(string))
 			cfg.BasePath = base.ResolveReference(path).String()
-			client := api.NewAPIClient(cfg)
+			client := goflagr.NewAPIClient(cfg)
 
 			return client, nil
 		},

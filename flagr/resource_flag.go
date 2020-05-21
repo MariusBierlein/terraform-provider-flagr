@@ -2,9 +2,9 @@ package flagr
 
 import (
 	"context"
+	"github.com/checkr/goflagr"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/mariusbierlein/terraform-provider-flagr/flagr/api"
 	"strconv"
 )
 
@@ -42,8 +42,8 @@ func ResourceFlag() *schema.Resource {
 }
 
 func resourceFlagCreate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
-	flag, _, _ := a.FlagApi.CreateFlag(context.TODO(), api.CreateFlagRequest{
+	a := i.(*goflagr.APIClient)
+	flag, _, _ := a.FlagApi.CreateFlag(context.TODO(), goflagr.CreateFlagRequest{
 		Description: data.Get("description").(string),
 	})
 	data.SetId(strconv.FormatInt(flag.Id, 10))
@@ -52,7 +52,7 @@ func resourceFlagCreate(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceFlagRead(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flag, _, _ := a.FlagApi.GetFlag(context.TODO(), stringToInt64(data.Id()))
 	data.Set("key", flag.Key)
 	data.Set("enabled", flag.Enabled)
@@ -62,11 +62,11 @@ func resourceFlagRead(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceFlagUpdate(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	flagId := stringToInt64(data.Id())
 	if data.HasChanges("key", "description", "dataRecordsEnabled") {
 		//todo: error handling
-		a.FlagApi.PutFlag(context.TODO(), flagId, api.PutFlagRequest{
+		a.FlagApi.PutFlag(context.TODO(), flagId, goflagr.PutFlagRequest{
 			Description:        data.Get("description").(string),
 			DataRecordsEnabled: data.Get("data_records_enabled").(bool),
 			Key:                data.Get("key").(string),
@@ -74,7 +74,7 @@ func resourceFlagUpdate(data *schema.ResourceData, i interface{}) error {
 	}
 	if data.HasChange("enabled") {
 		// enabled in PutFlagRequest doesn't do anything, so this has to be a separate request
-		a.FlagApi.SetFlagEnabled(context.TODO(), flagId, api.SetFlagEnabledRequest{
+		a.FlagApi.SetFlagEnabled(context.TODO(), flagId, goflagr.SetFlagEnabledRequest{
 			Enabled: data.Get("enabled").(bool),
 		})
 	}
@@ -82,7 +82,7 @@ func resourceFlagUpdate(data *schema.ResourceData, i interface{}) error {
 }
 
 func resourceFlagDelete(data *schema.ResourceData, i interface{}) error {
-	a := i.(*api.APIClient)
+	a := i.(*goflagr.APIClient)
 	id, _ := strconv.ParseInt(data.Id(), 10, 64)
 
 	a.FlagApi.DeleteFlag(context.TODO(), id)
